@@ -1,5 +1,9 @@
 package uk.tw.energy.service;
 
+import org.springframework.stereotype.Service;
+import uk.tw.energy.domain.ElectricityReading;
+import uk.tw.energy.domain.PricePlan;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
@@ -8,9 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.springframework.stereotype.Service;
-import uk.tw.energy.domain.ElectricityReading;
-import uk.tw.energy.domain.PricePlan;
 
 @Service
 public class PricePlanService {
@@ -42,6 +43,18 @@ public class PricePlanService {
         final BigDecimal cost = energyConsumedInKwH.multiply(pricePlan.getUnitRate());
         return cost;
     }
+
+//    private BigDecimal calculateOfTheWeek() {
+//        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+//        LocalDate now = LocalDate.now(ZoneOffset.UTC);
+//        LocalDate startOfLastWeek = now.minusWeeks(1).with(weekFields.dayOfWeek(), 1);
+//        Instant startInstant = startOfLastWeek.atStartOfDay(ZoneOffset.UTC).toInstant();
+//        ElectricityReading electricityReading1 = new ElectricityReading(startInstant.plus(1, ChronoUnit.DAYS), BigDecimal.valueOf(8));
+//        ElectricityReading electricityReading2 = new ElectricityReading(startInstant.plus(1, ChronoUnit.DAYS), BigDecimal.valueOf(20));
+//        ElectricityReading electricityReading3 = new ElectricityReading(startInstant.plus(1, ChronoUnit.DAYS), BigDecimal.valueOf(50));
+//        ElectricityReading electricityReading4 = new ElectricityReading(startInstant.plus(2, ChronoUnit.DAYS), BigDecimal.valueOf(16));
+//        ElectricityReading electricityReading5 = new ElectricityReading(startInstant.plus(2, ChronoUnit.DAYS), BigDecimal.valueOf(32));
+//    }
 
     private BigDecimal calculateAverageReading(List<ElectricityReading> electricityReadings) {
         BigDecimal summedReadings = electricityReadings.stream()

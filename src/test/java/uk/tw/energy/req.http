@@ -1,0 +1,17 @@
+### Post store readings
+POST http://localhost:8080/readings/store
+Content-Type: application/json
+
+{
+  "smartMeterId": "smart-meter-111",
+  "electricityReadings": [
+    {
+      "time": "2025-03-11T15:46:12.074175Z",
+      "reading": 1.0721
+    }
+  ]
+}
+
+###
+GET http://localhost:8080/price-plans/compare-all/smart-meter-0
+Accept: application/json

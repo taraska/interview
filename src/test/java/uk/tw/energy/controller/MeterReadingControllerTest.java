@@ -1,11 +1,5 @@
 package uk.tw.energy.controller;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -13,6 +7,13 @@ import uk.tw.energy.builders.MeterReadingsBuilder;
 import uk.tw.energy.domain.ElectricityReading;
 import uk.tw.energy.domain.MeterReadings;
 import uk.tw.energy.service.MeterReadingService;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class MeterReadingControllerTest {
 
@@ -49,12 +50,12 @@ public class MeterReadingControllerTest {
 
     @Test
     public void givenMultipleBatchesOfMeterReadingsShouldStore() {
-        MeterReadings meterReadings = new MeterReadingsBuilder()
+        final MeterReadings meterReadings = new MeterReadingsBuilder()
                 .setSmartMeterId(SMART_METER_ID)
                 .generateElectricityReadings()
                 .build();
 
-        MeterReadings otherMeterReadings = new MeterReadingsBuilder()
+        final MeterReadings otherMeterReadings = new MeterReadingsBuilder()
                 .setSmartMeterId(SMART_METER_ID)
                 .generateElectricityReadings()
                 .build();
@@ -71,13 +72,14 @@ public class MeterReadingControllerTest {
 
     @Test
     public void givenMeterReadingsAssociatedWithTheUserShouldStoreAssociatedWithUser() {
-        MeterReadings meterReadings = new MeterReadingsBuilder()
+        final String smartMeterId = "00001";
+        final MeterReadings meterReadings = new MeterReadingsBuilder()
                 .setSmartMeterId(SMART_METER_ID)
                 .generateElectricityReadings()
                 .build();
 
-        MeterReadings otherMeterReadings = new MeterReadingsBuilder()
-                .setSmartMeterId("00001")
+        final MeterReadings otherMeterReadings = new MeterReadingsBuilder()
+                .setSmartMeterId(smartMeterId)
                 .generateElectricityReadings()
                 .build();
 

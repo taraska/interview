@@ -1,13 +1,5 @@
 package uk.tw.energy.controller;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-import java.math.BigDecimal;
-import java.time.Instant;
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -18,11 +10,21 @@ import uk.tw.energy.service.AccountService;
 import uk.tw.energy.service.MeterReadingService;
 import uk.tw.energy.service.PricePlanService;
 
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 public class PricePlanComparatorControllerTest {
     private static final String WORST_PLAN_ID = "worst-supplier";
     private static final String BEST_PLAN_ID = "best-supplier";
     private static final String SECOND_BEST_PLAN_ID = "second-best-supplier";
     private static final String SMART_METER_ID = "smart-meter-id";
+    private static final String LAST_WEEK = "smart-meter-10";
     private PricePlanComparatorController controller;
     private MeterReadingService meterReadingService;
     private AccountService accountService;
@@ -31,10 +33,11 @@ public class PricePlanComparatorControllerTest {
     public void setUp() {
         meterReadingService = new MeterReadingService(new HashMap<>());
 
+        PricePlan pricePlanLastWeekCompsamtion = new PricePlan(LAST_WEEK, null, BigDecimal.TEN, null);
         PricePlan pricePlan1 = new PricePlan(WORST_PLAN_ID, null, BigDecimal.TEN, null);
         PricePlan pricePlan2 = new PricePlan(BEST_PLAN_ID, null, BigDecimal.ONE, null);
         PricePlan pricePlan3 = new PricePlan(SECOND_BEST_PLAN_ID, null, BigDecimal.valueOf(2), null);
-        List<PricePlan> pricePlans = List.of(pricePlan1, pricePlan2, pricePlan3);
+        List<PricePlan> pricePlans = List.of(pricePlan1, pricePlan2, pricePlan3, pricePlanLastWeekCompsamtion);
         PricePlanService pricePlanService = new PricePlanService(pricePlans, meterReadingService);
 
         accountService = new AccountService(Map.of(SMART_METER_ID, WORST_PLAN_ID));
@@ -42,13 +45,30 @@ public class PricePlanComparatorControllerTest {
         controller = new PricePlanComparatorController(pricePlanService, accountService);
     }
 
+//    @Test
+//    public void calculateCostOfLastWeekComsamptionUsageCostOfLastWeekCompsemation_return404NotFound() {
+//        ResponseEntity<List<Map<PricePlan, BigDecimal>>> listResponseEntity = controller.calculateCostOfLastWeekComsamption(SMART_METER_ID);
+//        assertEquals(listResponseEntity.getStatusCode(), HttpStatus.NOT_FOUND);
+//    }
+
+//    @Test
+//    public void caluclateUsageCostOfLastWeekCompsemation_returnEnergyConsumed() {
+//        final String smartMeterId = LAST_WEEK;
+//        ResponseEntity<List<Map<PricePlan, BigDecimal>>> listResponseEntity = controller.calculateCostOfLastWeekComsamption(smartMeterId);
+//        assertEquals(listResponseEntity.getStatusCode(), HttpStatus.OK);
+//        //data equals to expecrted
+//    }
+
+
+
     @Test
     public void calculatedCostForEachPricePlan_happyPath() {
-        var electricityReading = new ElectricityReading(Instant.now().minusSeconds(3600), BigDecimal.valueOf(15.0));
+        final var sec = 3600;
+        var electricityReading = new ElectricityReading(Instant.now().minusSeconds(sec), BigDecimal.valueOf(15.0));
         var otherReading = new ElectricityReading(Instant.now(), BigDecimal.valueOf(5.0));
         meterReadingService.storeReadings(SMART_METER_ID, List.of(electricityReading, otherReading));
 
-        ResponseEntity<Map<String, Object>> response = controller.calculatedCostForEachPricePlan(SMART_METER_ID);
+        var response = controller.calculatedCostForEachPricePlan(SMART_METER_ID);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         Map<String, Object> expected = Map.of(
@@ -107,8 +127,7 @@ public class PricePlanComparatorControllerTest {
         var reading1 = new ElectricityReading(Instant.now(), BigDecimal.valueOf(3.0));
         meterReadingService.storeReadings(SMART_METER_ID, List.of(reading0, reading1));
 
-        ResponseEntity<List<Map.Entry<String, BigDecimal>>> response =
-                controller.recommendCheapestPricePlans(SMART_METER_ID, 5);
+        var response = controller.recommendCheapestPricePlans(SMART_METER_ID, 5);
 
         var expectedPricePlanToCost = List.of(
                 new AbstractMap.SimpleEntry<>(BEST_PLAN_ID, BigDecimal.valueOf(14.0)),
