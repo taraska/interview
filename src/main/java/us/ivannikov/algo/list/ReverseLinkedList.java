@@ -56,6 +56,15 @@ public class ReverseLinkedList {
             System.out.println("value new again: " + listNode5.val);
             listNode5 = listNode5.next;
         }
+
+        ListNode d1 = reverse(listNode4);
+        ListNode t1 = d1;
+
+        ListNode listNode6 = reverseOneMore(t1);
+        while (listNode6 != null) {
+            System.out.println("value new again one more: " + listNode6.val);
+            listNode6 = listNode6.next;
+        }
     }
 
     public static ListNode reverse(ListNode node) {
@@ -81,6 +90,30 @@ public class ReverseLinkedList {
             cur.next = prev;
             prev = cur;
             cur = next;
+        }
+
+        return cur;
+    }
+
+    public static ListNode reverseOneMore(ListNode listNode) {
+        ListNode prev = null;
+        ListNode cur = listNode;
+
+
+        //1 -> 2 -> 3 -> 4
+        //1    2 -> 3 -> 4
+        //1 <- 2    3 -> 4
+
+        //nodeNext = 2
+        //prev = 1
+
+        //2 -> 1
+        //prev = 2
+        while (cur != null) {
+            ListNode nodeNext = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = nodeNext;
         }
 
         return prev;
