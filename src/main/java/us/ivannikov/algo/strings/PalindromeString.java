@@ -13,6 +13,12 @@ public class PalindromeString {
 
         int numberOfPalindromes1 = palindromeString.getNumberOfPalindromes(strOne);
         System.out.println("aaa: " + numberOfPalindromes1); //a a a aa aa aaa
+
+        int x = palindromeString.countPalindrome(strOne);
+        System.out.println(x); //6
+
+        int y = palindromeString.countPalindrome(str);
+        System.out.println(y); //3
     }
 
 
@@ -37,5 +43,30 @@ public class PalindromeString {
             num++;
         }
         return num;
+    }
+
+    public int countPalindrome(String string) {
+        int count = 0;
+
+        for (int n = 0; n < string.length(); n++) {
+            count += foo1(string, n, n);
+            count += foo1(string, n + 1, n);
+        }
+
+        return count;
+    }
+
+    public int foo1(String string, int left, int right) {
+        int count = 0;
+        while (right >= 0 &&
+            left < string.length() &&
+            string.charAt(left) == string.charAt(right)) {
+
+            count++;
+            left++;
+            right--;
+        }
+
+        return count;
     }
 }

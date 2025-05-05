@@ -77,6 +77,10 @@ public class PermutationString {
         System.out.println("___");
         List<String> abcd = permutationString.permute("abcd");
         abcd.stream().forEach(System.out::println);
+
+        System.out.println("___");
+        List<String> abc1 = permutationString.permutation("abc");
+        abc1.stream().forEach(System.out::println);
     }
 
     public List<String> permute(String s) {
@@ -117,10 +121,41 @@ public class PermutationString {
         }
 
         for (int i = 0; i < size; i++) {
-            heapPermutation(a, size-1, result);
+            heapPermutation(a, size - 1, result);
             // Odd vs even size handling
-            if (size % 2 == 1) swap(a, 0, size-1);
-            else swap(a, i, size-1);
+            if (size % 2 == 1) swap(a, 0, size - 1);
+            else swap(a, i, size - 1);
         }
+    }
+
+
+    private List<String> permutation(String string) {
+        List<String> strings = new ArrayList<>();
+        int n = 0;
+        char[] charArray = string.toCharArray();
+        perm(n, charArray, strings);
+        return strings;
+    }
+
+    private void perm(int n, char[] chars, List<String> list) {
+        if (n == chars.length - 1) {
+            list.add(new String(chars));
+            return;
+        }
+
+        for (int i = n; i < chars.length; i++) {
+            //change
+            swap1(chars, i, n);
+            perm(n + 1, chars, list);
+            //back
+            swap1(chars, i, n);
+
+        }
+    }
+
+    private void swap1(char[] chars, int i, int j) {
+        char temp = chars[i];
+        chars[i] = chars[j];
+        chars[j] = temp;
     }
 }
