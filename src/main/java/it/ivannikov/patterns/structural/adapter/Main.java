@@ -1,5 +1,7 @@
-package it.ivannikov.patterns.structural;
+package it.ivannikov.patterns.structural.adapter;
 
+//связать классы, которые мало что общего имеют друг с другом, но должны работать
+//вместе
 interface Ethernet {
     void connectToInternet();
 }
