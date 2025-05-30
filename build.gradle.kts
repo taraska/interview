@@ -65,6 +65,9 @@ val functionalTest = task<Test>("functionalTest") {
 
 dependencies {
     /* Spring Boot */
+    implementation ("com.vaadin:vaadin-bom:24.3.0")
+    implementation ("com.vaadin:vaadin-core:24.3.0")
+
     implementation ("org.springframework.boot:spring-boot-starter-web")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude (group = "org.junit.vintage", module = "junit-vintage-engine")

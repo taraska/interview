@@ -100,6 +100,7 @@ public class PermutationString {
             backtrack(arr, start + 1, result);
             swap(arr, start, i); // backtrack
         }
+
     }
 
     private void swap(char[] arr, int i, int j) {

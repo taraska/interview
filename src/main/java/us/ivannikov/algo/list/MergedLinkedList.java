@@ -1,6 +1,9 @@
 package us.ivannikov.algo.list;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.ListIterator;
 
 public class MergedLinkedList {
@@ -61,6 +64,11 @@ public class MergedLinkedList {
                 elem2 = it2.hasNext() ? it2.next() : null;
             }
         }
+
+        int[] b = new int[1];
+        ArrayList<Object> objects = new ArrayList<>();
+
+        List<int[]> list = Arrays.asList(b);
 
         // Add remaining elements
         while (elem1 != null) {

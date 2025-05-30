@@ -25,6 +25,24 @@ public class CoinChange {
         int amount = 11;
         System.out.println("Minimum coins needed: " + minCoins(coins, amount)); // Output: 3
         System.out.println("Minimum coins needed: " + copyCoin(coins, amount)); // Output: 3
+        System.out.println("Minimum coins needed: " + copyOneMoreChange(coins, amount)); // Output: 3
+    }
+
+
+    public static int copyOneMoreChange(int[] coins, int amount) {
+        int[] arr = new int[amount + 1];
+        Arrays.fill(arr, amount + 1);
+        arr[0] = 0;
+
+        for (int i = 0; i <= amount; i++) {
+            for (int coin : coins) {
+                if (coin <= i) {
+                    arr[i] = Math.min(arr[i], arr[i - coin] + 1);
+                }
+            }
+        }
+
+        return arr[amount] > amount ? -1 : arr[amount];
     }
 
     public static int copyCoin(int[] coins, int amount) {
